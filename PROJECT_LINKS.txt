@@ -1,0 +1,13 @@
+Project Title: Student Grievance Understanding, Sensitivity Detection and Routing Assistant
+Problem Statement ID: LPU-GRIEVANCE-01
+Registration Numbers of All Group Members: 12504942
+Student: Soumya Thakur
+Group Type: Individual
+
+GitHub Repository Link: Not created (student has no GitHub repository)
+Live Deployed Project Link: Not deployed. The application currently runs locally at http://127.0.0.1:5000, which is not publicly accessible.
+
+Submission status:
+- The source code is included in this ZIP.
+- A public repository and live deployment remain outstanding if required by the course.
+- The university instructions list a PPT as mandatory. It is excluded at the student's request; obtain faculty approval before submitting without it.
