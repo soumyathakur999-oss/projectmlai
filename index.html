@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+{% block title %}Submit a grievance · Student Services{% endblock %}
+{% block content %}
+<section class="intro">
+  <div class="eyebrow">STUDENT SUPPORT</div>
+  <h1>Raise a concern.<br><span>We’ll help route it.</span></h1>
+  <p class="lead">Use this portal to submit an academic, campus or student-support concern. Your submission will be reviewed and directed to the relevant team.</p>
+  <div class="trust-line"><span class="dot"></span> Submissions are reviewed by authorized university staff.</div>
+</section>
+
+<section class="form-layout">
+  <div class="form-card">
+    <div class="form-heading">
+      <div><div class="eyebrow">NEW SUBMISSION</div><h2>Grievance details</h2></div>
+      <span class="step-label">01 / 01</span>
+    </div>
+    <form method="post">
+      <div class="field-grid">
+        <label class="field">
+          <span>Your name</span>
+          <input type="text" name="student_name" placeholder="Enter your full name">
+        </label>
+        <label class="field">
+          <span>University email</span>
+          <input type="email" name="student_email" placeholder="name@university.edu">
+        </label>
+      </div>
+      <label class="check-row"><input type="checkbox" name="anonymous" id="anonymous"><span>Submit anonymously</span></label>
+      <div class="field-grid">
+        <label class="field">
+          <span>Department (if known)</span>
+          <select name="department">
+            <option value="Not sure">Not sure</option>
+            {% for department in departments %}<option>{{ department }}</option>{% endfor %}
+          </select>
+        </label>
+        <label class="field">
+          <span>Complaint category</span>
+          <select name="category">
+            <option>Other</option><option>Attendance</option><option>Examination</option>
+            <option>Faculty</option><option>Hostel</option><option>Fees and Refunds</option>
+            <option>Scholarship</option><option>Network and ERP</option><option>Transport</option>
+            <option>Facilities</option><option>Harassment</option><option>Safety</option>
+            <option>Discrimination</option>
+          </select>
+        </label>
+      </div>
+      <label class="field">
+        <span>Describe your concern <b class="required">*</b></span>
+        <textarea name="description" rows="7" minlength="15" maxlength="5000" required placeholder="Explain what happened, when it happened, and what support or resolution you are requesting."></textarea>
+        <small>Do not include passwords or unnecessary personal information. 15–5,000 characters.</small>
+      </label>
+      <div class="privacy-note"><span class="lock">▣</span><span><strong>Privacy note</strong><br>Your complaint is intended for authorized staff. Avoid including sensitive information that is not necessary to explain the issue.</span></div>
+      <button class="button primary full" type="submit">Submit grievance <span>→</span></button>
+    </form>
+  </div>
+  <aside class="side-note">
+    <div class="side-icon">i</div>
+    <h3>What happens next?</h3>
+    <ol class="process-list">
+      <li><span>1</span><div><strong>Submission received</strong><small>You receive a unique tracking ID.</small></div></li>
+      <li><span>2</span><div><strong>Initial review</strong><small>The system suggests a department and priority for staff review.</small></div></li>
+      <li><span>3</span><div><strong>Assigned to a team</strong><small>Authorized staff review and route the concern.</small></div></li>
+      <li><span>4</span><div><strong>Status updated</strong><small>Use your tracking ID to check progress.</small></div></li>
+    </ol>
+    <div class="urgent-box"><strong>Need immediate help?</strong><p>This portal is not an emergency service. If someone is in immediate danger, contact campus security or local emergency services now.</p></div>
+  </aside>
+</section>
+<script>
+const anonymousBox = document.getElementById('anonymous');
+const identityFields = document.querySelectorAll('input[name="student_name"], input[name="student_email"]');
+function updateIdentityFields() {
+  identityFields.forEach((field) => {
+    field.disabled = anonymousBox.checked;
+    field.required = !anonymousBox.checked;
+    if (anonymousBox.checked) field.value = '';
+  });
+}
+anonymousBox.addEventListener('change', updateIdentityFields);
+updateIdentityFields();
+</script>
+{% endblock %}

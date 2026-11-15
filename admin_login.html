@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block title %}Staff sign in{% endblock %}
+{% block content %}
+<section class="narrow-card">
+  <div class="eyebrow">AUTHORIZED PERSONNEL</div>
+  <h1>Staff sign in</h1>
+  <p class="lead">Access the grievance review and routing dashboard.</p>
+  <form method="post">
+    <label class="field"><span>Username</span><input name="username" autocomplete="username" required></label>
+    <label class="field"><span>Password</span><input type="password" name="password" autocomplete="current-password" required></label>
+    <button class="button primary full" type="submit">Sign in →</button>
+  </form>
+  <p class="small muted">Local demo credentials are documented in README.md. Change them before any deployment.</p>
+</section>
+{% endblock %}

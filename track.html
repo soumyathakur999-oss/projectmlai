@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}Track a grievance{% endblock %}
+{% block content %}
+<section class="narrow-card">
+  <div class="eyebrow">STUDENT SERVICES</div>
+  <h1>Track a grievance</h1>
+  <p class="lead">Enter the tracking ID provided after submission.</p>
+  <form method="post">
+    <label class="field"><span>Tracking ID</span><input name="tracking_id" placeholder="GRV-XXXXXXXX" required></label>
+    <button class="button primary full" type="submit">Check status →</button>
+  </form>
+  {% if searched %}
+    {% if grievance %}
+      <div class="result-panel">
+        <div class="eyebrow">GRIEVANCE STATUS</div>
+        <h2>{{ grievance.tracking_id }}</h2>
+        <div class="status-row"><span>Current status</span><strong>{{ grievance.status }}</strong></div>
+        <div class="status-row"><span>Priority</span><strong>{{ grievance.priority }}</strong></div>
+        <div class="status-row"><span>Assigned department</span><strong>{{ grievance.predicted_department }}</strong></div>
+        <small class="muted">Last updated {{ grievance.updated_at|pretty_date }}</small>
+      </div>
+    {% else %}
+      <div class="flash error">No grievance was found for that tracking ID. Check the ID and try again.</div>
+    {% endif %}
+  {% endif %}
+</section>
+{% endblock %}

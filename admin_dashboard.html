@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block title %}Grievance administration{% endblock %}
+{% block content %}
+<div class="admin-top">
+  <div><div class="eyebrow">STAFF WORKSPACE</div><h1>Grievance overview</h1><p class="muted">Review, prioritize and route student submissions.</p></div>
+  <a class="button secondary" href="{{ url_for('admin_logout') }}">Sign out</a>
+</div>
+<div class="metrics-grid">
+  <div class="metric"><small>Total grievances</small><strong>{{ counts.total }}</strong></div>
+  <div class="metric"><small>Awaiting resolution</small><strong>{{ counts.pending }}</strong></div>
+  <div class="metric"><small>Resolved</small><strong>{{ counts.resolved }}</strong></div>
+  <div class="metric alert-metric"><small>Sensitive — restricted</small><strong>{{ counts.sensitive }}</strong></div>
+</div>
+<div class="dashboard-grid">
+  <section class="panel chart-panel"><div class="panel-heading"><h2>By department</h2><span class="muted">AI-suggested routing</span></div><canvas id="departmentChart" height="190"></canvas></section>
+  <section class="panel chart-panel"><div class="panel-heading"><h2>By status</h2></div><canvas id="statusChart" height="190"></canvas></section>
+</div>
+<section class="panel">
+  <div class="panel-heading"><div><h2>Grievance queue</h2><p class="muted">Sensitive cases are listed first for prompt human review.</p></div><span class="count-pill">{{ grievances|length }} records</span></div>
+  {% if grievances %}
+  <div class="table-wrap"><table>
+    <thead><tr><th>Tracking ID</th><th>Concern</th><th>Department</th><th>Priority</th><th>Status</th><th></th></tr></thead>
+    <tbody>
+    {% for item in grievances %}
+      <tr class="{% if item.sensitive %}sensitive-row{% endif %}">
+        <td><strong>{{ item.tracking_id }}</strong>{% if item.sensitive %}<small class="sensitive-label">SENSITIVE · {{ item.sensitivity_type }}</small>{% endif %}</td>
+        <td class="description-cell">{{ item.description[:90] }}{% if item.description|length > 90 %}…{% endif %}</td>
+        <td>{{ item.predicted_department }}</td>
+        <td><span class="priority {{ item.priority|lower }}">{{ item.priority }}</span></td>
+        <td>{{ item.status }}</td>
+        <td><a class="table-link" href="{{ url_for('grievance_detail', grievance_id=item.id) }}">Review →</a></td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table></div>
+  {% else %}<div class="empty-state">No grievances have been submitted yet.</div>{% endif %}
+</section>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+const deptData = {{ dept_data|tojson }};
+const statusData = {{ status_data|tojson }};
+new Chart(document.getElementById('departmentChart'), {
+  type: 'bar',
+  data: { labels: deptData.map(x => x.department), datasets: [{ label: 'Grievances', data: deptData.map(x => x.total), backgroundColor: '#496b91', borderRadius: 4 }] },
+  options: { responsive: true, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, ticks: { precision: 0 } } } }
+});
+new Chart(document.getElementById('statusChart'), {
+  type: 'doughnut',
+  data: { labels: statusData.map(x => x.status), datasets: [{ data: statusData.map(x => x.total), backgroundColor: ['#496b91','#91a8bd','#c5d0da','#6f8b7d','#c7a66a'] }] },
+  options: { responsive: true, plugins: { legend: { position: 'bottom' } } }
+});
+</script>
+{% endblock %}

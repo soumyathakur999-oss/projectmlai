@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block title %}Review grievance{% endblock %}
+{% block content %}
+<a class="back-link" href="{{ url_for('admin_dashboard') }}">← Back to queue</a>
+<div class="detail-layout">
+  <section class="panel detail-main">
+    {% if grievance.sensitive %}
+      <div class="sensitive-banner">SENSITIVE CASE · {{ grievance.sensitivity_type }} · PRIORITY ESCALATION</div>
+    {% endif %}
+    <div class="eyebrow">GRIEVANCE {{ grievance.tracking_id }}</div>
+    <h1>Complaint details</h1>
+    <p class="muted">Submitted {{ grievance.created_at|pretty_date }}</p>
+    <div class="complaint-text">{{ grievance.description }}</div>
+    <div class="detail-grid">
+      <div><small>Student name</small><strong>{{ "Anonymous" if grievance.anonymous else grievance.student_name }}</strong></div>
+      <div><small>Student email</small><strong>{{ "Not provided" if grievance.anonymous else grievance.student_email }}</strong></div>
+      <div><small>Student-selected department</small><strong>{{ grievance.department }}</strong></div>
+      <div><small>AI-suggested department</small><strong>{{ grievance.predicted_department }}</strong></div>
+      <div><small>AI category</small><strong>{{ grievance.predicted_category }}</strong></div>
+      <div><small>Model confidence</small><strong>{{ "%.1f"|format(grievance.confidence * 100) }}%</strong></div>
+      <div><small>Priority</small><strong>{{ grievance.priority }}</strong></div>
+      <div><small>Sensitivity flag</small><strong>{{ "Yes — " + grievance.sensitivity_type if grievance.sensitive else "No rule triggered" }}</strong></div>
+    </div>
+    <p class="small muted">AI outputs are decision-support suggestions, not findings of fact. A trained staff member must review the case and determine the appropriate action.</p>
+  </section>
+  <aside class="panel">
+    <div class="eyebrow">CASE MANAGEMENT</div><h2>Update record</h2>
+    <form method="post">
+      <label class="field"><span>Status</span>
+        <select name="status">
+          {% for s in ["Submitted","Under Review","Forwarded","Resolved","Closed"] %}
+          <option value="{{ s }}" {% if grievance.status == s %}selected{% endif %}>{{ s }}</option>
+          {% endfor %}
+        </select>
+      </label>
+      <label class="field"><span>Assigned team / officer</span><input name="assigned_to" value="{{ grievance.assigned_to or '' }}" placeholder="e.g. Student Welfare Officer"></label>
+      <button class="button primary full" type="submit">Save update</button>
+    </form>
+  </aside>
+</div>
+{% endblock %}
